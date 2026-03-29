@@ -23,7 +23,7 @@ int numthreads = 0;
 
 // Function declarations: Feel free to add any functions you want.
 void  seq_heat_dist(float *, unsigned int, unsigned int);
-void  parallel_heat_dist(float *, unsigned int, unsigned int);
+void  parallel_heat_dist(float *, unsigned int, unsigned int, unsigned int);
 void  check_result(int, unsigned int, float * ); // check that the parallel version and sequential versions match
 
 /*****************************************************************/
@@ -226,13 +226,13 @@ void  parallel_heat_dist(float * playground, unsigned int N, unsigned int iterat
   for( k = 0; k < iterations; k++)
   {
     /* Calculate new values and store them in temp */
-    #pragma omp parallel for (numthreads)
+    #pragma omp parallel for num_threads(numthreads) collapse(2)
     for(i = 1; i < upper; i++)
       for(j = 1; j < upper; j++)
-    temp[index(i,j,N)] = (playground[index(i-1,j,N)] + 
-                        playground[index(i+1,j,N)] + 
-            playground[index(i,j-1,N)] + 
-            playground[index(i,j+1,N)])/4.0;
+        temp[index(i,j,N)] = (playground[index(i-1,j,N)] +
+                              playground[index(i+1,j,N)] +
+                              playground[index(i,j-1,N)] +
+                              playground[index(i,j+1,N)])/4.0;
   
             
               
